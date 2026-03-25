@@ -1,0 +1,43 @@
+.asideNav{
+    background-color: #f0f4f7;
+    width: 256px;
+    z-index: 50;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+}
+
+.headerNav{
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 32px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.headerNav h1{
+    font-size: 24px;
+    color: var(--principal-color);
+}
+
+.headerNav p{
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.navigation{
+    padding: 8px 0;
+    list-style: none;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: none;
+    flex-grow: 1;
+}

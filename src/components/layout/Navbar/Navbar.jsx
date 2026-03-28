@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import React from 'react'
 import "./Navbar.css"
 
@@ -15,40 +16,52 @@ const Navbar = () => {
             <ul className='navigation'>
 
                 <li>
-                    <span className="material-symbols-outlined"> dashboard </span> 
-                    Dashboard
+                    <NavLink to="/">
+                        <span className="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </NavLink>
                 </li>
 
                 <li>
-                    <span className="material-symbols-outlined"> contacts_product </span>
-                    Clientes
+                    <NavLink to="/clientes">
+                        <span className="material-symbols-outlined">contacts_product</span>
+                        Clientes
+                    </NavLink>
                 </li>
 
                 <li>
-                    <span className="material-symbols-outlined"> event_available </span>
-                    Atendimentos
+                    <NavLink to="/atendimentos">
+                        <span className="material-symbols-outlined">event_available</span>
+                        Atendimentos
+                    </NavLink>
                 </li>
 
                 <li>
-                    <span className="material-symbols-outlined"> inventory_2 </span>
-                    Produtos
+                    <NavLink to="/produtos">
+                        <span className="material-symbols-outlined">inventory_2</span>
+                        Produtos
+                    </NavLink>
                 </li>
 
                 <li>
-                    <span className="material-symbols-outlined"> payments </span>
-                    Pagamentos
+                    <NavLink to="/pagamentos">
+                        <span className="material-symbols-outlined">payments</span>
+                        Pagamentos
+                    </NavLink>
                 </li>
 
                 <li>
-                    <span className="material-symbols-outlined"> receipt_long </span>
-                    Dispensas
+                    <NavLink to="/dispensas">
+                        <span className="material-symbols-outlined">receipt_long</span>
+                        Despesas
+                    </NavLink>
                 </li>
 
             </ul>
 
             <footer className='footerNav'>
 
-                <button>Configurações</button>
+                <button> <span className="material-symbols-outlined mr-4" data-icon="settings">settings</span> Configurações</button>
 
             </footer>
 

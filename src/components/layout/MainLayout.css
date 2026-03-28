@@ -1,0 +1,17 @@
+.mainLayout {
+  display: flex;
+  height: 100dvh;
+  position: relative;
+  background-color: var(--color_background_soft);
+  width: 100%;
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: 100vh;
+  padding: 20px;
+  width: calc(100vw - 256px);
+  overflow-y: auto;
+}

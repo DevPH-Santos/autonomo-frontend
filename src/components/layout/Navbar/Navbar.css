@@ -1,4 +1,4 @@
-.asideNav{
+.asideNav {
     background-color: #f0f4f7;
     width: 256px;
     z-index: 50;
@@ -7,11 +7,11 @@
     left: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     align-items: center;
 }
 
-.headerNav{
+.headerNav {
     font-weight: bold;
     text-transform: uppercase;
     padding: 32px 40px;
@@ -22,22 +22,101 @@
     gap: 4px;
 }
 
-.headerNav h1{
+.headerNav h1 {
     font-size: 24px;
-    color: var(--principal-color);
+    color: var(--color_primary);
 }
 
-.headerNav p{
+.headerNav p {
     font-size: 14px;
-    color: var(--secondary-color);
+    color: var(--color_secondary);
 }
 
-.navigation{
+.navigation {
     padding: 8px 0;
     list-style: none;
     overflow-y: auto;
     display: flex;
+    gap: 4px;
     flex-direction: column;
     scrollbar-width: none;
     flex-grow: 1;
+    width: 100%;
+}
+
+.navigation li a {
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 12px 32px;
+    font-weight: 600;
+    color: var(--color_text_muted);
+    background-color: transparent;
+    transition: var(--transition);
+}
+
+.navigation li a:hover {
+    color: var(--color_primary_dark);
+    background-color: var(--color_background_light);
+}
+
+.navigation li a.active {
+    position: relative;
+    color: var(--color_primary_dark);
+    font-weight: bold;
+    background-color: var(--color_background_light);
+}
+
+.navigation li a.active::before {
+    width: 5px;
+    border-radius: 12px;
+    height: 24px;
+    position: absolute;
+    left: 0;
+    content: "";
+    border-radius: 12px;
+    background-color: var(--color_accent);
+    animation: fadeNav 0.3s ease-in-out;
+}
+
+.footerNav {
+    padding: 32px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.footerNav button {
+    font-size: 16px;
+    color: var(--color_text_muted);
+    font-weight: 600;
+    padding: 12px 0;
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    transition: var(--transition);
+}
+
+.footerNav button:hover {
+    background-color: var(--color_background_light);
+}
+
+@keyframes fadeNav {
+  from {
+      transform: translateX(-5px);
+  }
+  to {
+    transform: translateX(0px);
+  }
 }

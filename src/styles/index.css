@@ -7,7 +7,22 @@
   box-sizing: border-box;
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 :root{
-  --principal-color: #075985;
-  --secondary-color: #64748b;
+  --color_primary: #075985;
+  --color_secondary: #64748b;
+  --color_text_muted: #475569;
+  --color_primary_dark: #0c4a6e;
+  --color_background_light: #d4eeff4d;
+  --color_accent: #0284c7;
+  --color_background_soft: #f7f9fb;
+  --transition: all 0.2s ease-in-out;
+}
+
+body{
+  min-height: 100dvh;
+  width: 100dvw;
 }

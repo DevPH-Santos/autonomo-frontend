@@ -51,7 +51,7 @@ const Navbar = () => {
                 </li>
 
                 <li>
-                    <NavLink to="/dispensas">
+                    <NavLink to="/despesas">
                         <span className="material-symbols-outlined">receipt_long</span>
                         Despesas
                     </NavLink>

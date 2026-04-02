@@ -19,6 +19,9 @@ html{
   --color_background_light: #d4eeff4d;
   --color_accent: #0284c7;
   --color_background_soft: #f7f9fb;
+  --color_border_light: #e2e8f0;
+  --color_primary_variant: #006399;
+  --color_bg_soft_alpha: #f7f9fbcc;
   --transition: all 0.2s ease-in-out;
 }
 

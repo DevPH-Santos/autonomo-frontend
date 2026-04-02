@@ -1,0 +1,60 @@
+.header-main {
+    padding: 0 32px;
+    width: calc(100% - 256px);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgb(233, 233, 233);
+    background-color: var(--color_bg_soft_alpha);
+    backdrop-filter: blur(12px);
+
+}
+
+.header-main .header-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.header-brand h2 {
+    font-size: 18px;
+    color: var(--color_primary_dark);
+    font-weight: 700;
+}
+
+.header-brand .separate {
+    width: 1px;
+    height: 16px;
+    background-color: var(--color_border_light);
+}
+
+.header-brand select {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.header-main .header-actions .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.header-main .header-actions .actions button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: var(--color_primary_variant);
+}

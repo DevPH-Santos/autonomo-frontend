@@ -22,6 +22,8 @@ html{
   --color_border_light: #e2e8f0;
   --color_primary_variant: #006399;
   --color_bg_soft_alpha: #f7f9fbcc;
+  --color_secondary_dark: #404752;
+  
   --transition: all 0.2s ease-in-out;
 }
 

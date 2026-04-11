@@ -10,7 +10,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  min-height: 100vh;
+  height: 100%;
   width: calc(100vw - 256px);
   overflow-y: auto;
 }

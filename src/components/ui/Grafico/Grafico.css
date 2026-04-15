@@ -1,0 +1,15 @@
+/**
+ * Área de plotagem do gráfico.
+ * Bordas esquerda e inferior simulam eixos cartesianos.
+ * Fundo levemente cinzento para destacar a curva.
+ */
+.chart-content {
+    flex-grow: 1;
+    margin-top: 16px;
+    position: relative;
+    border-left: 2px solid var(--color_neutral_light);
+    border-bottom: 2px solid var(--color_neutral_light);
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px 10px 10px;
+}

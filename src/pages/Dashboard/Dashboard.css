@@ -139,8 +139,13 @@
   position: absolute;
   top: 80px;
   right: 0;
-  background-color: rgba(235, 235, 235, 0.397);
-  backdrop-filter: blur(25px);
+  /* Diminuir a transparência (0.8) ajuda a "esconder" mais o fundo */
+  background-color: rgba(236, 236, 236, 0.8); 
+  
+  /* Valores entre 20px e 40px já dão um desfoque total */
+  -webkit-backdrop-filter: blur(30px); 
+  backdrop-filter: blur(30px);
+  
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -606,4 +611,185 @@
   font-size: 12px;
   color: #6b7280;
   margin: 0;
+}
+
+
+
+
+
+/* ============================================================================
+   RESPONSIVIDADE TABLET
+============================================================================ */
+
+@media (max-width: 1024px) {
+  .header-main {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .dashboard-main-content {
+    padding-inline: 20px;
+    gap: 32px;
+  }
+
+  .gains-cards-dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overview-statistics-dashboard {
+    flex-direction: column;
+  }
+
+  .dashboard-chart {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .clients-rank-dashboard {
+    width: 100%;
+  }
+}
+
+
+/* ============================================================================
+   RESPONSIVIDADE MOBILE
+============================================================================ */
+
+@media (max-width: 768px) {
+  .header-main {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-main .header-brand {
+    width: fit-content;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .header-brand h2 {
+    font-size: 16px;
+  }
+
+  .header-brand select {
+    font-size: 11px;
+  }
+
+  .header-main .header-actions {
+    width: 100%;
+  }
+
+  .header-main .header-actions .actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .header-main .header-actions .actions .profile-actions {
+    top: 100%;
+    right: 16px;
+    width: 220px;
+    padding: 16px;
+  }
+
+  .dashboard-main-content {
+    padding-top: 160px;
+    padding-inline: 16px;
+    padding-bottom: 32px;
+    gap: 24px;
+  }
+
+  .header-dashboard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-dashboard div:first-child h3 {
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .header-dashboard div:first-child p {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .header-dashboard .messageStatusPayment {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .gains-cards-dashboard {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .gain-card {
+    padding: 20px;
+  }
+
+  .gain-card-info h4 {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .overview-statistics-dashboard {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .dashboard-chart {
+    width: 100%;
+    padding: 20px;
+    min-height: auto;
+  }
+
+  .header-chart {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .header-chart div:last-child {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .clients-rank-dashboard {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .client-item-rank {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .overview-daily-routes {
+    padding: 20px;
+  }
+
+  .overview-daily-routes header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .routes-list {
+    flex-direction: column;
+  }
+
+  .route {
+    width: 100%;
+    min-width: unset;
+    flex: unset;
+  }
 }

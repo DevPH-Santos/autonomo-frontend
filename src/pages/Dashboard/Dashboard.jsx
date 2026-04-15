@@ -209,7 +209,7 @@ const Dashboard = () => {
               </div>
               <div className="gain-card-info">
                 <p>RECEITA MENSAL</p>
-                <h4>R$4.500,00</h4>
+                <h4>4.500,00</h4>
               </div>
             </div>
 
@@ -230,7 +230,7 @@ const Dashboard = () => {
               </div>
               <div className="gain-card-info">
                 <p>LUCRO MENSAL</p>
-                <h4>R$2.800,00</h4>
+                <h4>2.800,00</h4>
               </div>
             </div>
 
@@ -243,7 +243,7 @@ const Dashboard = () => {
               </div>
               <div className="gain-card-info">
                 <p>TOTAL PARA RECEBER</p>
-                <h4>R$1.200,00</h4>
+                <h4>1.200,00</h4>
               </div>
             </div>
 

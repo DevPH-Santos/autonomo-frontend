@@ -364,7 +364,7 @@ const Dashboard = () => {
             <header>
               <h4>Rotas de Hoje</h4>
               <a href="#" aria-label="Ver mapa de rotas">
-                View Map
+                Ver no mapa
                 <span className="material-symbols-outlined" aria-hidden="true">map</span>
               </a>
             </header>
@@ -389,8 +389,8 @@ const Dashboard = () => {
                   <span className="period">AM</span>
                 </div>
                 <div className="informations-route">
-                  <p className="objective-visit">Pool Chemical Balance</p>
-                  <p className="client-address">Lakeside Manor, Villa 4</p>
+                  <p className="objective-visit">Peneiração</p>
+                  <p className="client-address">Rua Santiago, 23B</p>
                 </div>
               </div>
 
@@ -401,20 +401,20 @@ const Dashboard = () => {
                   <span className="period">AM</span>
                 </div>
                 <div className="informations-route">
-                  <p className="objective-visit">Filter Replacement</p>
-                  <p className="client-address">Sunny Palms Apts</p>
+                  <p className="objective-visit">Limpeza de Borda</p>
+                  <p className="client-address">Rua Bento Alves de Godoy, 223A</p>
                 </div>
               </div>
 
               {/* Rota — 02:15 PM */}
               <div className="route">
                 <div className="route-time">
-                  <span className="hour">02:15</span>
+                  <span className="hour">14:15</span>
                   <span className="period">PM</span>
                 </div>
                 <div className="informations-route">
-                  <p className="objective-visit">Full Cleaning</p>
-                  <p className="client-address">Silva Residence</p>
+                  <p className="objective-visit">Limpeza Completa</p>
+                  <p className="client-address">Av. Novaes, 39B</p>
                 </div>
               </div>
             </div>

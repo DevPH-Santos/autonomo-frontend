@@ -1,0 +1,182 @@
+/* ============================================================================
+   1. CABEÇALHO PRINCIPAL
+   Barra fixa no topo com efeito de desfoque (glassmorphism).
+   Largura = 100vw menos a sidebar lateral (256 px).
+============================================================================ */
+
+.header-main {
+  padding: 0 32px;
+  width: calc(100% - 256px);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid rgb(233, 233, 233);
+  background-color: var(--color_bg_soft_alpha);
+  backdrop-filter: blur(12px);
+}
+
+
+/* ============================================================================
+     2. TÍTULO E SELETOR DE PERÍODO
+     Agrupa o nome da página e o select de mês com um divisor visual entre eles.
+  ============================================================================ */
+
+.header-main .header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.header-brand h2 {
+  font-size: 18px;
+  color: var(--color_primary_dark);
+  font-weight: 700;
+}
+
+/** Linha vertical entre o título e o select. */
+.header-brand .header-divider {
+  width: 1px;
+  height: 16px;
+  background-color: var(--color_border_light);
+}
+
+
+/* ============================================================================
+     4. BOTÕES DE AÇÃO DO HEADER
+     Linha de botões ícone + botão avatar de perfil.
+  ============================================================================ */
+
+.header-main .header-actions .actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/** Botão de ação genérico (ícone sem borda). */
+.header-main .header-actions .actions button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--color_primary_variant);
+}
+
+/** Avatar circular do perfil com cor de destaque. */
+.header-main .header-actions .actions button.header-profile-button {
+  background-color: var(--color_accent);
+  color: var(--color_border_light);
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+}
+
+
+/* ============================================================================
+     5. MENU SUSPENSO DE PERFIL
+     Aparece abaixo do avatar; usa glassmorphism para integrar ao fundo.
+     Visibilidade controlada pela classe `.profile-actions-hidden`.
+  ============================================================================ */
+
+.header-main .header-actions .actions .profile-actions {
+  position: absolute;
+  top: 80px;
+  right: 0;
+  /* Diminuir a transparência (0.8) ajuda a "esconder" mais o fundo */
+  background-color: rgba(236, 236, 236, 0.8);
+
+  /* Valores entre 20px e 40px já dão um desfoque total */
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.header-main .header-actions .actions .profile-actions p {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/** Botão de logout — pill vermelho centralizado. */
+.header-main .header-actions .actions .profile-actions button {
+  margin-top: 25px;
+  margin: 40px auto 0;
+  font-size: 16px;
+  background-color: rgb(209, 23, 23);
+  color: white;
+  padding: 7px 35px;
+  border-radius: 9999px;
+}
+
+/** Estado oculto — toggled via JS em `handleShowProfileActions`. */
+.header-main .header-actions .actions .profile-actions.profile-actions-hidden {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+
+  .header-main {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .header-main {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-main .header-brand {
+    width: fit-content;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .header-brand h2 {
+    font-size: 16px;
+  }
+
+  .header-brand select {
+    font-size: 11px;
+  }
+
+  .header-main .header-actions {
+    width: 100%;
+  }
+
+  .header-main .header-actions .actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .header-main .header-actions .actions .profile-actions {
+    top: 100%;
+    right: 16px;
+    width: 220px;
+    padding: 16px;
+  }
+
+}

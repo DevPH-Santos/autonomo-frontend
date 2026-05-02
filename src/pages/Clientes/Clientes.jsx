@@ -1,5 +1,6 @@
 import React from 'react'
 import Header_Clientes from '../../components/ui/Header_Clientes/Header_Clientes'
+import "./Clientes.css"
 
 const clientes = [
   {

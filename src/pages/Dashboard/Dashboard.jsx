@@ -14,37 +14,7 @@
 import Grafico from "../../components/ui/Grafico/Grafico";
 import "./Dashboard.css";
 import React from "react";
-// import {
-//   AreaChart,
-//   Area,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from "recharts";
-
-// // ---------------------------------------------------------------------------
-// // Dados estáticos
-// // ---------------------------------------------------------------------------
-
-// /**
-//  * @typedef {Object} WeeklyRevenue
-//  * @property {string} name   - Rótulo da semana exibido no eixo X (ex.: "SEMANA 1").
-//  * @property {number} receita - Receita apurada na semana, em reais.
-//  */
-
-// /**
-//  * Dados de receita semanal utilizados no gráfico de área.
-//  *
-//  * @type {WeeklyRevenue[]}
-//  * @constant
-//  */
-// const data = [
-//   { name: "SEMANA 1", receita: 1000 },
-//   { name: "SEMANA 2", receita: 150 },
-//   { name: "SEMANA 3", receita: 1000 },
-//   { name: "SEMANA 4", receita: 150 },
-// ];
+import Header_Dashboard from "../../components/ui/Header_Dashboard/Header_Dashboard";
 
 // ---------------------------------------------------------------------------
 // Componente
@@ -72,28 +42,6 @@ import React from "react";
  * }
  */
 const Dashboard = () => {
-  // -------------------------------------------------------------------------
-  // Handlers
-  // -------------------------------------------------------------------------
-
-  /**
-   * Alterna a visibilidade do menu suspenso de ações do perfil.
-   *
-   * Adiciona ou remove a classe CSS `profile-actions-hidden` do primeiro
-   * elemento com a classe `profile-actions` encontrado no DOM.
-   *
-   * @function
-   * @returns {void}
-   */
-  const handleShowProfileActions = () => {
-    const div = document.getElementsByClassName("profile-actions")[0];
-
-    if (div.classList.contains("profile-actions-hidden")) {
-      div.classList.remove("profile-actions-hidden");
-    } else {
-      div.classList.add("profile-actions-hidden");
-    }
-  };
 
   // -------------------------------------------------------------------------
   // Render
@@ -107,64 +55,8 @@ const Dashboard = () => {
             CABEÇALHO PRINCIPAL
             Contém a marca/título, seletor de mês e ações do usuário.
         ================================================================ */}
-        <header className="header-main">
 
-          {/* Marca e seletor de período */}
-          <div className="header-brand">
-            <h2>Dashboard</h2>
-
-            <div className="header-divider" aria-hidden="true" />
-
-            {/**
-             * Seletor de período de análise.
-             * Atualmente não está conectado a nenhum estado — integrar
-             * com contexto ou Redux ao implementar filtragem real de dados.
-             */}
-            <select name="selectMonth" id="selectMonth" aria-label="Selecionar período">
-              <option value="esseMes">Esse Mês</option>
-              <option value="mesPassado">Mês Passado</option>
-              <option value="proximoMes">Próximo Mês</option>
-            </select>
-          </div>
-
-          {/* Botões de ação e perfil */}
-          <div className="header-actions">
-            <div className="actions">
-
-              {/* Atalhos rápidos */}
-              <button aria-label="Calendário">
-                <span className="material-symbols-outlined">calendar_today</span>
-              </button>
-              <button aria-label="Filtros">
-                <span className="material-symbols-outlined">filter_list</span>
-              </button>
-              <button aria-label="Notificações">
-                <span className="material-symbols-outlined">notifications</span>
-                <span className="material-symbols-outlined">notifications_unread</span>
-              </button>
-
-              {/**
-               * Botão de perfil — abre/fecha o menu de ações do usuário.
-               * @see handleShowProfileActions
-               */}
-              <button
-                onClick={handleShowProfileActions}
-                className="header-profile-button"
-                aria-haspopup="true"
-                aria-label="Abrir menu do perfil"
-              >
-                <span className="material-symbols-outlined">person</span>
-              </button>
-
-              {/* Menu suspenso de perfil (visibilidade controlada por CSS) */}
-              <div className="profile-actions profile-actions-hidden" role="menu">
-                <p>Olá Pedro Santos!</p>
-                <p>Carteira: R$ 1870,29</p>
-                <button className="btn-logout" role="menuitem">Sair</button>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Header_Dashboard />
 
         {/* ================================================================
             CONTEÚDO PRINCIPAL DO DASHBOARD
@@ -278,8 +170,8 @@ const Dashboard = () => {
                     TODO: conectar esses botões a um estado para alternar
                     entre visualização diária e semanal dos dados do gráfico.
                   */}
-                  <button>Diariamente</button>
-                  <button>Semanalmente</button>
+                  <button className="selected">Mensalmente</button>
+                  <button>Anualmente</button>
                 </div>
               </div>
 
@@ -293,7 +185,7 @@ const Dashboard = () => {
                * @see {@link https://recharts.org/en-US/api/AreaChart} Recharts AreaChart
                */}
 
-               <Grafico/>
+              <Grafico />
 
             </div>
 

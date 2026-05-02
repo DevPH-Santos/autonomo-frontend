@@ -377,6 +377,12 @@
   font-weight: 600;
   line-height: 16px;
   border-radius: 4px;
+  background-color: rgb(209, 209, 209);
+}
+
+.header-chart div:last-child button.selected {
+  background-color: var(--color_accent);
+  color: white;
 }
 
 
@@ -699,7 +705,7 @@
   }
 
   .dashboard-main-content {
-    padding-top: 160px;
+    padding-top: 80px;
     padding-inline: 16px;
     padding-bottom: 32px;
     gap: 24px;

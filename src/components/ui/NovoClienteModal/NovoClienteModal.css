@@ -1,0 +1,410 @@
+/* ═══════════════════════════════════════════════
+   NovoClienteModal.css
+   Design System — Gestão de Piscina
+   ═══════════════════════════════════════════════ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  --color-primary: #006399;
+  --color-primary-dim: #005786;
+  --color-primary-container: #cde5ff;
+  --color-on-primary: #f4f8ff;
+  --color-on-primary-container: #005685;
+
+  --color-surface: #f7f9fb;
+  --color-surface-bright: #ffffff;
+  --color-surface-container: #e8eff3;
+  --color-surface-container-low: #f0f4f7;
+  --color-surface-container-high: #d9e4ea;
+
+  --color-on-surface: #2a3439;
+  --color-on-surface-variant: #566166;
+  --color-outline: #717c82;
+  --color-outline-variant: #a9b4b9;
+
+  --font-headline: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-sm: 0.5rem;
+  /* 8px  */
+  --radius-md: 0.75rem;
+  /* 12px */
+  --radius-lg: 1rem;
+  /* 16px */
+
+  --shadow-primary: 0 8px 24px rgba(0, 99, 153, 0.18);
+  --transition-base: all 0.2s ease;
+}
+
+/* ════════════════════════════════════
+   OVERLAY
+   ════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(42, 52, 57, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFadeIn 0.2s ease forwards;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ════════════════════════════════════
+   MODAL CONTAINER
+   ════════════════════════════════════ */
+.modal-container {
+  background-color: var(--color-surface-bright);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Scrollbar customizada */
+.modal-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 99px;
+}
+
+/* ════════════════════════════════════
+   HEADER
+   ════════════════════════════════════ */
+.modal-header {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid rgba(169, 180, 185, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-surface-bright);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modal-header__icon-wrap {
+  padding: 0.5rem;
+  background-color: var(--color-primary-container);
+  border-radius: var(--radius-sm);
+  color: var(--color-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-header__title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-header__title {
+  font-family: var(--font-headline);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  margin: 0;
+}
+
+.modal-header__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+}
+
+.modal-header__close:hover {
+  color: var(--color-on-surface);
+  background-color: var(--color-surface-container);
+}
+
+/* ════════════════════════════════════
+   BODY
+   ════════════════════════════════════ */
+.modal-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Section ── */
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-section__label {
+  font-family: var(--font-headline);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-outline);
+  margin: 0;
+}
+
+/* ── Grid ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .form-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .form-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.form-grid__full {
+  grid-column: 1 / -1;
+}
+
+/* ── Field ── */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field__label {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-on-surface);
+  padding: 0 0.25rem;
+}
+
+/* ── Inputs / Selects / Textarea ── */
+
+.form-input--error {
+  box-shadow: 0 0 0 2px #9f403d;
+  background-color: #fff0f0;
+}
+
+.form-input--error::placeholder {
+  color: #9f403d88;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background-color: var(--color-surface-container-high);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  outline: none;
+  transition: var(--transition-base);
+}
+
+.form-input,
+.form-select {
+  height: 3rem;
+  padding: 0 1rem;
+}
+
+.form-textarea {
+  padding: 1rem;
+  resize: none;
+  line-height: 1.6;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-outline);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(0, 99, 153, 0.15);
+  background-color: #cfe3ef;
+}
+
+/* ── Valor com prefixo R$ ── */
+.input-prefix-wrap {
+  height: 3rem;
+  position: relative;
+}
+
+.input-prefix-wrap .input-prefix {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-on-surface-variant);
+  font-weight: 500;
+  font-size: 0.875rem;
+  pointer-events: none;
+  font-family: var(--font-body);
+}
+
+.input-prefix-wrap .form-input {
+  padding-left: 3rem;
+}
+
+/* ════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════ */
+.modal-footer {
+  padding: 1.25rem 2rem;
+  background-color: var(--color-surface-container-low);
+  border-top: 1px solid rgba(169, 180, 185, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  position: sticky;
+  bottom: 0;
+}
+
+/* ── Botão Cancelar ── */
+.btn-cancel {
+  padding: 0 1.5rem;
+  height: 3rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.btn-cancel:hover {
+  background-color: var(--color-surface-container-high);
+  color: var(--color-on-surface);
+}
+
+/* ── Botão Salvar ── */
+.btn-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 2rem;
+  height: 3rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-primary);
+  transition: var(--transition-base);
+}
+
+.btn-save:hover {
+  background-color: var(--color-primary-dim);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(0, 99, 153, 0.25);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+/* ════════════════════════════════════
+   MATERIAL SYMBOLS
+   ════════════════════════════════════ */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-size: 1.25rem;
+  line-height: 1;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+
+/* ════════════════════════════════════
+   RESPONSIVIDADE MOBILE
+   ════════════════════════════════════ */
+@media (max-width: 480px) {
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-header,
+  .modal-footer {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-header__title {
+    font-size: 1.25rem;
+  }
+
+  .btn-save {
+    padding: 0 1.25rem;
+  }
+
+  .btn-cancel {
+    padding: 0 1rem;
+  }
+}

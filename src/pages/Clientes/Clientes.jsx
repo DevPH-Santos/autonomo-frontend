@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header_Clientes from '../../components/ui/Header_Clientes/Header_Clientes'
+import NovoClienteModal from '../../components/ui/NovoClienteModal/NovoClienteModal'
 import "./Clientes.css"
 
 const clientes = [
@@ -30,6 +31,9 @@ const clientes = [
 ]
 
 const Clientes = () => {
+
+  const [modalAberto, setModalAberto] = useState(false)
+
   return (
     <>
 
@@ -39,11 +43,15 @@ const Clientes = () => {
 
 
           <header className='headerPage-clientes'>
+            <NovoClienteModal
+              isOpen={modalAberto}
+              onClose={() => setModalAberto(false)}
+            />
             <div>
               <h1>Clientes</h1>
               <p>Gerencie seus clientes cadastrados e contratos ativos.</p>
             </div>
-            <button>
+            <button onClick={() => setModalAberto(true)}>
               <span className="material-symbols-outlined">add</span> Novo Cliente
             </button>
           </header>

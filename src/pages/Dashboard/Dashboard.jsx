@@ -14,7 +14,7 @@
 import Grafico from "../../components/ui/Grafico/Grafico";
 import "./Dashboard.css";
 import React from "react";
-import Header_Dashboard from "../../components/ui/Header_Dashboard/Header_Dashboard";
+import DashboardHeader from "./DashboardHeader";
 
 // ---------------------------------------------------------------------------
 // Componente
@@ -56,7 +56,7 @@ const Dashboard = () => {
             Contém a marca/título, seletor de mês e ações do usuário.
         ================================================================ */}
 
-        <Header_Dashboard />
+        <DashboardHeader />
 
         {/* ================================================================
             CONTEÚDO PRINCIPAL DO DASHBOARD

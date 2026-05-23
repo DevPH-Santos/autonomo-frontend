@@ -1,7 +1,6 @@
-import "./Header_Clientes.css"
 import React from 'react'
 
-const Header_Clientes = () => {
+const ClientesHeader = () => {
 
     // -------------------------------------------------------------------------
     // Handlers
@@ -76,4 +75,4 @@ const Header_Clientes = () => {
     )
 }
 
-export default Header_Clientes
+export default ClientesHeader

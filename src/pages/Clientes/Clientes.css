@@ -1,623 +1,852 @@
-/* ============================================================
-   LAYOUT — dashboard-container-clientes
-   ============================================================ */
-.dashboard-container-clientes {
-    width: 100%;
-    max-width: 1280px;
-    margin: auto;
-    padding: 96px;
+/**
+ * @file Clientes.css
+ * @description Estilos da página de listagem de clientes.
+ *
+ * Índice de seções:
+ *  1.  Cabeçalho principal (header fixo — compartilhado com Dashboard)
+ *  2.  Campo de busca do header
+ *  3.  Botões de ação do header
+ *  4.  Menu suspenso de perfil
+ *  5.  Layout geral da página
+ *  6.  Cabeçalho da página (título + botão "Novo Cliente")
+ *  7.  Barra de filtros
+ *  8.  Table card (container da tabela)
+ *  9.  Tabela de clientes
+ * 10.  Avatar do cliente
+ * 11.  Células específicas (localização, serviço, frequência, valor)
+ * 12.  Badge de status (ativo / inativo)
+ * 13.  Botões de ação por linha
+ * 14.  Paginação
+ * 15.  Responsividade — laptop pequeno / tablet landscape  (≤ 1024 px)
+ * 16.  Responsividade — tablet portrait                    (≤ 768 px)
+ * 17.  Responsividade — mobile                             (≤ 480 px)
+ *
+ * Variáveis CSS consumidas (definidas em :root ou tema global):
+ *  --color_bg_soft_alpha      Fundo semitransparente para glassmorphism
+ *  --color_primary_dark       Azul escuro para títulos de destaque
+ *  --color_primary_variant    Azul intermediário para ícones e acentos
+ *  --color_primary            Azul sky-800 para valores monetários
+ *  --color_accent             Cor de destaque para botão primário
+ *  --color_border_light       Cinza claro (#e2e8f0) para divisores
+ *  --color_neutral_dark       Texto escuro para headings
+ *  --color_neutral            Texto cinza para descrições
+ *  --color_secondary          Cinza intermediário (#64748b)
+ *  --color_text_muted         Cinza escuro (#475569)
+ *  --color_text_subtle        Cinza claro (#94a3b8)
+ *  --color_background_soft    Fundo suave (#f0f4f7 ≈ slate-100)
+ *  --color_background_light   Azul clarinho (#cde5ff ≈ sky-100)
+ *  --color_error              Vermelho para ação de exclusão
+ *  --transition               Transição padrão do design system
+ */
+
+
+/* ============================================================================
+   1. CABEÇALHO PRINCIPAL
+   Barra fixa no topo com efeito de desfoque (glassmorphism).
+   Largura = 100 % menos a sidebar lateral (256 px).
+============================================================================ */
+
+.header-main {
+  padding: 0 32px;
+  width: calc(100% - 256px);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  gap: 20px;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid rgb(233, 233, 233);
+  background-color: var(--color_bg_soft_alpha);
+  backdrop-filter: blur(12px);
 }
 
-/* ============================================================
-   PAGE HEADER  (h1 + botão "Novo Cliente")
-   ============================================================ */
+
+/* ============================================================================
+   2. CAMPO DE BUSCA DO HEADER
+   Input com ícone de lupa posicionado de forma absoluta à esquerda.
+============================================================================ */
+
+.header-main .header-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  justify-content: flex-start;
+}
+
+/** Ícone de lupa sobreposto ao input. */
+.header-main .header-brand span {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #94a3b8;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.header-main .header-brand input {
+  width: 100%;
+  padding: 8px 16px 8px 40px; /* padding-left acomoda o ícone */
+  border: 1px solid whitesmoke;
+  outline: 1px solid whitesmoke;
+  background-color: rgb(214, 214, 214);
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+
+/* ============================================================================
+   3. BOTÕES DE AÇÃO DO HEADER
+   Linha de botões de ícone + botão avatar de perfil.
+============================================================================ */
+
+.header-main .header-actions .actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  gap: 24px;
+}
+
+/** Botão de ação genérico (ícone sem borda). */
+.header-main .header-actions .actions button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--color_primary_variant);
+}
+
+/** Avatar circular do perfil com cor de destaque. */
+.header-main .header-actions .actions button.header-profile-button {
+  background-color: var(--color_accent);
+  color: var(--color_border_light);
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+}
+
+
+/* ============================================================================
+   4. MENU SUSPENSO DE PERFIL
+   Aparece abaixo do avatar; usa glassmorphism para integrar ao fundo.
+   Visibilidade controlada pela classe `.profile-actions-hidden` via JS.
+============================================================================ */
+
+.header-main .header-actions .actions .profile-actions {
+  position: absolute;
+  top: 80px;
+  right: 0;
+  background-color: rgba(236, 236, 236, 0.8); /* transparência 0.8 esconde mais o fundo */
+  -webkit-backdrop-filter: blur(30px);         /* valores entre 20–40 px garantem desfoque total */
+  backdrop-filter: blur(30px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.header-main .header-actions .actions .profile-actions p {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/** Botão de logout — pill vermelho centralizado. */
+.header-main .header-actions .actions .profile-actions button {
+  margin: 40px auto 0;
+  font-size: 16px;
+  background-color: rgb(209, 23, 23);
+  color: white;
+  padding: 7px 35px;
+  border-radius: 9999px;
+}
+
+/** Estado oculto — toggled via `handleShowProfileActions`. */
+.header-main .header-actions .actions .profile-actions.profile-actions-hidden {
+  display: none;
+}
+
+
+/* ============================================================================
+   5. LAYOUT GERAL DA PÁGINA
+   Container centralizado com padding que compensa o header fixo.
+============================================================================ */
+
+.dashboard-container-clientes {
+  width: 100%;
+  max-width: 1280px;
+  margin: auto;
+  padding: 96px;
+}
+
+
+/* ============================================================================
+   6. CABEÇALHO DA PÁGINA
+   Linha com título/descrição à esquerda e botão "Novo Cliente" à direita.
+============================================================================ */
+
 .headerPage-clientes {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .headerPage-clientes h1 {
-    font-weight: 800;
-    font-size: 36px;
-    line-height: 40px;
-    letter-spacing: -0.9px;
-    color: var(--color_neutral_dark);
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: -0.9px;
+  color: var(--color_neutral_dark);
 }
 
 .headerPage-clientes p {
-    color: var(--color_neutral);
-    font-size: 18px;
-    line-height: 28px;
-    margin-top: 4px;
+  color: var(--color_neutral);
+  font-size: 18px;
+  line-height: 28px;
+  margin-top: 4px;
 }
 
+/** Botão primário de criação. */
 .headerPage-clientes button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: var(--color_accent);
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    padding: 0.625rem 1.25rem;
-    border: none;
-    border-radius: 0.75rem;
-    cursor: pointer;
-    transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color_accent);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .headerPage-clientes button:hover {
-    background-color: var(--color_primary_dark);
+  background-color: var(--color_primary_dark);
 }
 
-/* ============================================================
-   FILTER BAR
-   ============================================================ */
+
+/* ============================================================================
+   7. BARRA DE FILTROS
+   Faixa com selects de filtro; divisor vertical visível apenas acima de 768 px.
+============================================================================ */
+
 .filter-bar {
-    background-color: var(--color_background_soft);
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    margin-bottom: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
+  background-color: var(--color_background_soft);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 }
 
+/** Rótulo com ícone + texto em uppercase. */
 .filter-bar_label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color_secondary);
-    /* #64748b */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color_secondary);
 }
 
 .filter-bar_label .material-symbols-outlined {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .filter-bar_label span:last-child {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-/* Divisor vertical */
+/** Divisor vertical entre filtros — oculto em mobile. */
 .filter-bar_divider {
-    height: 1.5rem;
-    width: 1px;
-    background-color: var(--color_border_light);
-    /* #e2e8f0 */
-    display: none;
-    margin: 0 0.5rem;
+  height: 1.5rem;
+  width: 1px;
+  background-color: var(--color_border_light);
+  display: none;
+  margin: 0 0.5rem;
 }
 
 @media (min-width: 768px) {
-    .filter-bar_divider {
-        display: block;
-    }
+  .filter-bar_divider {
+    display: block;
+  }
 }
 
 .filter-bar select {
-    background: transparent;
-    border: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color_text_muted);
-    /* #475569 */
-    cursor: pointer;
-    outline: none;
+  background: transparent;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color_text_muted);
+  cursor: pointer;
+  outline: none;
 }
 
+/** Contador de resultados alinhado à direita. */
 .filter-bar_count {
-    margin-left: auto;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    color: var(--color_text_subtle);
-    /* #94a3b8 */
+  margin-left: auto;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color_text_subtle);
 }
 
-/* ============================================================
-   TABLE CARD
-   ============================================================ */
+
+/* ============================================================================
+   8. TABLE CARD
+   Wrapper com fundo branco e sombra suave; overflow-x para scroll horizontal.
+============================================================================ */
+
 .table-card {
-    background-color: white;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07);
+  background-color: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07);
 }
 
 .table-card_scroll {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
-/* ============================================================
-   TABLE
-   ============================================================ */
+
+/* ============================================================================
+   9. TABELA DE CLIENTES
+   Tabela full-width com hover por linha e células com padding consistente.
+============================================================================ */
+
 .clientes-table {
-    width: 100%;
-    text-align: left;
-    border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
 }
 
+/** Cabeçalho da tabela. */
 .clientes-table thead tr {
-    border-bottom: 1px solid white;
+  border-bottom: 1px solid white;
 }
 
 .clientes-table thead th {
-    padding: 1.25rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--color_text_subtle);
-    /* #94a3b8 */
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    white-space: nowrap;
+  padding: 1.25rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color_text_subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
 }
 
-.clientes-table thead th:first-child {
-    padding-left: 1.5rem;
-}
+.clientes-table thead th:first-child { padding-left: 1.5rem; }
+.clientes-table thead th:last-child  { padding-right: 1.5rem; text-align: right; }
 
-.clientes-table thead th:last-child {
-    padding-right: 1.5rem;
-    text-align: right;
-}
-
+/** Linhas do corpo. */
 .clientes-table tbody tr {
-    border-top: 1px solid #ffffff;
-    transition: background-color 0.15s;
+  border-top: 1px solid #ffffff;
+  transition: background-color 0.15s;
 }
 
 .clientes-table tbody tr:hover {
-    background-color: color-mix(in srgb, var(--color_background_soft) 30%, transparent);
+  background-color: color-mix(in srgb, var(--color_background_soft) 30%, transparent);
 }
 
 .clientes-table td {
-    padding: 1.25rem 1rem;
-    vertical-align: middle;
+  padding: 1.25rem 1rem;
+  vertical-align: middle;
 }
 
-.clientes-table td:first-child {
-    padding-left: 1.5rem;
-}
+.clientes-table td:first-child { padding-left: 1.5rem; }
+.clientes-table td:last-child  { padding-right: 1.5rem; text-align: right; }
 
-.clientes-table td:last-child {
-    padding-right: 1.5rem;
-    text-align: right;
-}
 
-/* ============================================================
-   AVATAR
-   ============================================================ */
+/* ============================================================================
+   10. AVATAR DO CLIENTE
+   Círculo com iniciais; variantes de cor definidas por modificador de classe.
+============================================================================ */
+
+/** Célula com avatar + informações textuais. */
 .client-cell {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .client-avatar {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.875rem;
-    flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  flex-shrink: 0;
 }
 
-.client-avatar--secondary-container {
-    background-color: var(--color_background_light);
-    color: var(--color_primary_variant);
-}
-
-.client-avatar--tertiary-container {
-    background-color: var(--color_background_light);
-    color: var(--color_primary_variant);
+/** Variantes de cor do avatar. */
+.client-avatar--secondary-container,
+.client-avatar--tertiary-container,
+.client-avatar--sky {
+  background-color: var(--color_background_light);
+  color: var(--color_primary_variant);
 }
 
 .client-avatar--slate {
-    background-color: var(--color_border_light);
-    /* #e2e8f0 */
-    color: var(--color_secondary);
-    /* #64748b */
+  background-color: var(--color_border_light);
+  color: var(--color_secondary);
 }
 
-.client-avatar--sky {
-    background-color: var(--color_background_light);
-    color: var(--color_primary_variant);
-}
-
+/** Informações textuais ao lado do avatar. */
 .client-info_name {
-    font-weight: 700;
-    font-size: 0.875rem;
-    color: var(--color_neutral_dark);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color_neutral_dark);
 }
 
 .client-info_phone {
-    font-size: 0.75rem;
-    color: var(--color_secondary);
-    /* #64748b */
+  font-size: 0.75rem;
+  color: var(--color_secondary);
 }
 
-/* ============================================================
-   CÉLULAS ESPECÍFICAS
-   ============================================================ */
+
+/* ============================================================================
+   11. CÉLULAS ESPECÍFICAS
+   Estilos pontuais para localização, tipo de serviço, frequência e valor.
+============================================================================ */
+
 .cell-location {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color_text_muted);
-    /* #475569 */
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color_text_muted);
 }
 
+/** Pill de tipo de serviço — fundo cinza claro. */
 .badge-service {
-    display: inline-block;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    background-color: var(--color_background_soft);
-    /* #f0f4f7 ≈ slate-100 */
-    color: var(--color_secondary);
-    /* #64748b */
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: var(--color_background_soft);
+  color: var(--color_secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
 }
 
 .cell-frequency {
-    font-size: 0.875rem;
-    color: var(--color_text_muted);
+  font-size: 0.875rem;
+  color: var(--color_text_muted);
 }
 
+/** Valor monetário em azul escuro. */
 .cell-value {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: var(--color_primary);
-    /* #075985 = sky-800 */
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color_primary);
 }
 
-/* ============================================================
-   STATUS BADGE
-   ============================================================ */
+
+/* ============================================================================
+   12. BADGE DE STATUS
+   Pill com ponto colorido para indicar ativo / inativo.
+============================================================================ */
+
 .badge-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .badge-status_dot {
-    width: 0.375rem;
-    height: 0.375rem;
-    border-radius: 50%;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
 }
 
-/* Ativo — green não tem variável no :root, mantém valor semântico próprio */
+/** Ativo — verde (sem variável no :root; valor semântico próprio). */
 .badge-status--active {
-    background-color: #dcfce7;
-    color: #15803d;
+  background-color: #dcfce7;
+  color: #15803d;
 }
 
 .badge-status--active .badge-status_dot {
-    background-color: #22c55e;
+  background-color: #22c55e;
 }
 
-/* Inativo */
+/** Inativo — cinza neutro. */
 .badge-status--inactive {
-    background-color: var(--color_background_soft);
-    /* #f0f4f7 ≈ slate-100 */
-    color: var(--color_secondary);
-    /* #64748b */
+  background-color: var(--color_background_soft);
+  color: var(--color_secondary);
 }
 
 .badge-status--inactive .badge-status_dot {
-    background-color: var(--color_text_subtle);
-    /* #94a3b8 */
+  background-color: var(--color_text_subtle);
 }
 
-/* ============================================================
-   ACTION BUTTONS
-   ============================================================ */
+
+/* ============================================================================
+   13. BOTÕES DE AÇÃO POR LINHA
+   Aparecem apenas no hover da linha; botão de deletar fica vermelho no hover.
+============================================================================ */
+
 .row-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    opacity: 0;
-    transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
 .clientes-table tbody tr:hover .row-actions {
-    opacity: 1;
+  opacity: 1;
 }
 
 .row-actions_btn {
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: transparent;
-    border-radius: 50%;
-    color: var(--color_text_subtle);
-    /* #94a3b8 */
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  color: var(--color_text_subtle);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .row-actions_btn:hover {
-    background-color: #ffffff;
-    /* #ffffff */
+  background-color: #ffffff;
 }
 
 .row-actions_btn--view:hover,
 .row-actions_btn--edit:hover {
-    color: var(--color_primary_variant);
+  color: var(--color_primary_variant);
 }
 
 .row-actions_btn--delete:hover {
-    color: var(--color_error);
+  color: var(--color_error);
 }
 
 .row-actions_btn .material-symbols-outlined {
-    font-size: 1.125rem;
+  font-size: 1.125rem;
 }
 
-/* ============================================================
-   PAGINATION
-   ============================================================ */
+
+/* ============================================================================
+   14. PAGINAÇÃO
+   Linha com texto informativo à esquerda e controles numéricos à direita.
+============================================================================ */
+
 .table-pagination {
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid #ffffff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #ffffff;
 }
 
 .table-pagination_info {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color_secondary);
-    /* #64748b */
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color_secondary);
 }
 
 .pagination-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .pagination-controls_btn {
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: transparent;
-    border-radius: 0.25rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color_text_muted);
-    /* #475569 */
-    cursor: pointer;
-    transition: background-color 0.15s;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color_text_muted);
+  cursor: pointer;
+  transition: background-color 0.15s;
 }
 
 .pagination-controls_btn:hover {
-    background-color: var(--color_background_soft);
-    /* #f0f4f7 ≈ slate-100 */
+  background-color: var(--color_background_soft);
 }
 
+/** Botões de navegação (< >) — cor mais suave. */
 .pagination-controls_btn--nav {
-    color: var(--color_text_subtle);
-    /* #94a3b8 */
+  color: var(--color_text_subtle);
 }
 
+/** Página atual — destaque azul claro, sem interação. */
 .pagination-controls_btn--active {
-    background-color: var(--color_background_light);
-    /* #cde5ff ≈ sky-100 */
-    color: var(--color_primary_variant);
-    font-weight: 700;
-    pointer-events: none;
+  background-color: var(--color_background_light);
+  color: var(--color_primary_variant);
+  font-weight: 700;
+  pointer-events: none;
 }
 
 .pagination-controls_ellipsis {
-    padding: 0 0.5rem;
-    color: var(--color_neutral_light);
-    /* #a9b4b9 ≈ slate-300 */
-    font-size: 0.75rem;
-    user-select: none;
+  padding: 0 0.5rem;
+  color: var(--color_neutral_light);
+  font-size: 0.75rem;
+  user-select: none;
 }
 
-/* ============================================================
-   RESPONSIVIDADE
-   ============================================================ */
 
-/* ── 1024px — Laptop pequeno / tablet landscape ── */
+/* ============================================================================
+   15. RESPONSIVIDADE — LAPTOP PEQUENO / TABLET LANDSCAPE (≤ 1024 px)
+============================================================================ */
+
 @media (max-width: 1024px) {
 
-    .dashboard-container-clientes {
-        padding: 96px 32px;
-    }
+  /** Header ocupa toda a largura (sidebar some ou vira overlay). */
+  .header-main {
+    width: 100%;
+    padding: 0 20px;
+  }
 
-    /* Esconde colunas menos prioritárias */
-    .clientes-table thead th:nth-child(4),
-    .clientes-table tbody td:nth-child(4) {
-        display: none;
-        /* Frequência */
-    }
+  .dashboard-container-clientes {
+    padding: 96px 32px;
+  }
+
+  /** Oculta a coluna "Frequência" em telas menores. */
+  .clientes-table thead th:nth-child(4),
+  .clientes-table tbody td:nth-child(4) {
+    display: none;
+  }
 }
 
-/* ── 768px — Tablet portrait ── */
+
+/* ============================================================================
+   16. RESPONSIVIDADE — TABLET PORTRAIT (≤ 768 px)
+============================================================================ */
+
 @media (max-width: 768px) {
 
-    .dashboard-container-clientes {
-        padding: 96px 20px;
-    }
+  .header-main {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
 
-    /* Header empilha verticalmente */
-    .dashboard-container-clientes>header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
+  .header-main .header-actions .actions {
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 
-    .dashboard-container-clientes>header button {
-        justify-content: center;
-    }
+  .header-main .header-actions .actions .profile-actions {
+    top: 100%;
+    right: 16px;
+    width: 220px;
+    padding: 16px;
+  }
 
-    /* Filter bar quebra em coluna */
-    .filter-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        border-radius: 0.5rem;
-        gap: 0.75rem;
-    }
+  .dashboard-container-clientes {
+    padding: 96px 20px;
+  }
 
-    .filter-bar select {
-        width: 100%;
-        padding: 0.375rem 0;
-        border-bottom: 1px solid var(--color_border_light);
-    }
+  /** Header da página empilha verticalmente. */
+  .dashboard-container-clientes > header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 
-    .filter-bar_count {
-        margin-left: 0;
-        width: 100%;
-        padding-top: 0.25rem;
-        border-top: 1px solid var(--color_border_light);
-    }
+  .dashboard-container-clientes > header button {
+    justify-content: center;
+  }
 
-    /* Esconde mais colunas */
-    .clientes-table thead th:nth-child(3),
-    .clientes-table tbody td:nth-child(3) {
-        display: none;
-        /* Serviço */
-    }
+  /** Barra de filtros empilha em coluna. */
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 0.5rem;
+    gap: 0.75rem;
+  }
 
-    .clientes-table thead th:nth-child(5),
-    .clientes-table tbody td:nth-child(5) {
-        display: none;
-        /* Valor */
-    }
+  .filter-bar select {
+    width: 100%;
+    padding: 0.375rem 0;
+    border-bottom: 1px solid var(--color_border_light);
+  }
 
-    /* Ações sempre visíveis no mobile */
-    .row-actions {
-        opacity: 1;
-    }
+  .filter-bar_count {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--color_border_light);
+  }
+
+  /** Oculta também "Serviço" e "Valor" no tablet portrait. */
+  .clientes-table thead th:nth-child(3),
+  .clientes-table tbody td:nth-child(3),
+  .clientes-table thead th:nth-child(5),
+  .clientes-table tbody td:nth-child(5) {
+    display: none;
+  }
+
+  /** Ações sempre visíveis no mobile (sem depender de hover). */
+  .row-actions {
+    opacity: 1;
+  }
 }
 
-/* ── 480px — Mobile ── */
+
+/* ============================================================================
+   17. RESPONSIVIDADE — MOBILE (≤ 480 px)
+   A tabela é convertida em cards empilhados; todas as colunas voltam a aparecer
+   (os rótulos são injetados via atributo data-label com ::before).
+============================================================================ */
+
 @media (max-width: 480px) {
 
-    .dashboard-container-clientes {
-        padding: 120px 16px;
-    }
+  .divClientes .header-main {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 16px;
+  }
 
-    /* .dashboard-container-clientes>header h1 {
-        font-size: 1.25rem;
-    } */
+  .header-main .header-brand {
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+  }
 
-    /* Troca tabela por cards empilhados */
-    .table-card_scroll {
-        overflow-x: visible;
-    }
+  .header-brand input {
+    width: 100%;
+  }
 
-    .clientes-table,
-    .clientes-table thead,
-    .clientes-table tbody,
-    .clientes-table tr,
-    .clientes-table th,
-    .clientes-table td {
-        display: block;
-        width: 100%;
-    }
+  .dashboard-container-clientes {
+    padding: 120px 16px;
+  }
 
-    /* Esconde o thead — os rótulos viram pseudo-elementos */
-    .clientes-table thead {
-        display: none;
-    }
+  /** Desabilita scroll horizontal — cards ocupam a largura total. */
+  .table-card_scroll {
+    overflow-x: visible;
+  }
 
-    /* Cada row vira um card */
-    .clientes-table tbody tr {
-        border: 1px solid var(--color_border_light);
-        border-radius: 0.5rem;
-        margin-bottom: 0.75rem;
-        padding: 1rem;
-        background-color: #ffffff;
-        border-top: 1px solid var(--color_border_light);
-    }
+  /** Converte todos os elementos da tabela em block. */
+  .clientes-table,
+  .clientes-table thead,
+  .clientes-table tbody,
+  .clientes-table tr,
+  .clientes-table th,
+  .clientes-table td {
+    display: block;
+    width: 100%;
+  }
 
-    .clientes-table tbody tr:hover {
-        background-color: #ffffff;
-    }
+  /** Cabeçalho original some; rótulos viram pseudo-elementos. */
+  .clientes-table thead {
+    display: none;
+  }
 
-    /* Remove padding padrão das células */
-    .clientes-table td {
-        padding: 0.3rem 0;
-        text-align: left !important;
-        border: none;
-    }
+  /** Cada linha vira um card individual. */
+  .clientes-table tbody tr {
+    border: 1px solid var(--color_border_light);
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+    background-color: #ffffff;
+  }
 
-    .clientes-table td:first-child,
-    .clientes-table td:last-child {
-        padding-left: 0;
-        padding-right: 0;
-    }
+  .clientes-table tbody tr:hover {
+    background-color: #ffffff;
+  }
 
-    /* Todas as colunas visíveis novamente no card */
-    .clientes-table thead th:nth-child(3),
-    .clientes-table tbody td:nth-child(3),
-    .clientes-table thead th:nth-child(4),
-    .clientes-table tbody td:nth-child(4),
-    .clientes-table thead th:nth-child(5),
-    .clientes-table tbody td:nth-child(5) {
-        display: block;
-    }
+  /** Remove padding padrão das células dentro do card. */
+  .clientes-table td {
+    padding: 0.3rem 0;
+    text-align: left !important;
+    border: none;
+  }
 
-    /* Linha do cliente: avatar + nome ocupa linha inteira */
-    .client-cell {
-        margin-bottom: 0.75rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--color_background_soft);
-    }
+  .clientes-table td:first-child,
+  .clientes-table td:last-child {
+    padding-left: 0;
+    padding-right: 0;
+  }
 
-    /* Células com rótulo via data-label */
-    .clientes-table td[data-label]::before {
-        content: attr(data-label);
-        display: block;
-        font-size: 0.6875rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--color_text_subtle);
-        margin-bottom: 0.2rem;
-    }
+  /** Reativa todas as colunas ocultas nos breakpoints maiores. */
+  .clientes-table thead th:nth-child(3),
+  .clientes-table tbody td:nth-child(3),
+  .clientes-table thead th:nth-child(4),
+  .clientes-table tbody td:nth-child(4),
+  .clientes-table thead th:nth-child(5),
+  .clientes-table tbody td:nth-child(5) {
+    display: block;
+  }
 
-    /* Ações em linha no card */
-    .row-actions {
-        justify-content: flex-start;
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid var(--color_background_soft);
-    }
+  /** Linha do cliente ocupa a largura do card com separador inferior. */
+  .client-cell {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color_background_soft);
+  }
 
-    /* Paginação compacta */
-    .table-pagination {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: center;
-    }
+  /**
+   * Rótulo de cada célula injetado via data-label.
+   * Exemplo de markup: <td data-label="Serviço">Limpeza</td>
+   */
+  .clientes-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color_text_subtle);
+    margin-bottom: 0.2rem;
+  }
 
-    .pagination-controls_btn--active~.pagination-controls_btn:not(:last-child):not(.pagination-controls_btn--nav) {
-        display: none;
-    }
+  /** Ações em linha no rodapé do card. */
+  .row-actions {
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color_background_soft);
+  }
+
+  /** Paginação empilhada e centralizada. */
+  .table-pagination {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  /** Oculta páginas excedentes além da ativa no mobile. */
+  .pagination-controls_btn--active ~ .pagination-controls_btn:not(:last-child):not(.pagination-controls_btn--nav) {
+    display: none;
+  }
 }

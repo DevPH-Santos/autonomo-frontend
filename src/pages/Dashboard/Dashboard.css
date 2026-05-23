@@ -2,38 +2,40 @@
  * @file Dashboard.css
  * @description Estilos do componente Dashboard — painel de controle principal.
  *
- * Organização das seções:
- *  1. Cabeçalho principal (header)
- *  2. Título e seletor de período do header
- *  3. Select do header
- *  4. Botões de ação do header
- *  5. Menu suspenso de perfil
- *  6. Layout geral do dashboard
- *  7. Cabeçalho da seção do dashboard
- *  8. Cards de resumo financeiro
- *  9. Seção de estatísticas (gráfico + ranking)
- * 10. Gráfico de área
- * 11. Ranking de top clientes
- * 12. Rotas diárias
+ * Índice de seções:
+ *  1.  Cabeçalho principal (header fixo com glassmorphism)
+ *  2.  Grupo marca/título do header
+ *  3.  Select de período do header
+ *  4.  Botões de ação do header
+ *  5.  Menu suspenso de perfil
+ *  6.  Layout geral do dashboard
+ *  7.  Cabeçalho da seção do dashboard
+ *  8.  Cards de resumo financeiro (KPIs)
+ *  9.  Seção de estatísticas (gráfico + ranking)
+ * 10.  Gráfico de área (Recharts)
+ * 11.  Ranking de top clientes
+ * 12.  Rotas diárias
+ * 13.  Responsividade — tablet  (≤ 1024 px)
+ * 14.  Responsividade — mobile  (≤ 768 px)
  *
  * Variáveis CSS consumidas (definidas em :root ou tema global):
- *  --color_bg_soft_alpha   Fundo semitransparente para o efeito glassmorphism
- *  --color_primary_dark    Azul escuro para títulos de destaque
- *  --color_primary_variant Azul intermediário para ícones e acentos
- *  --color_accent          Cor de destaque para o avatar do perfil
- *  --color_border_light    Cinza claro para divisores e bordas sutis
- *  --color_neutral_dark    Texto escuro neutro para headings
- *  --color_neutral         Texto cinza neutro para descrições
- *  --color_neutral_light   Borda clara do gráfico
- *  --color_error           Vermelho para alertas de pagamento pendente
- *  --transition            Transição padrão do sistema de design
+ *  --color_bg_soft_alpha    Fundo semitransparente para glassmorphism
+ *  --color_primary_dark     Azul escuro para títulos de destaque
+ *  --color_primary_variant  Azul intermediário para ícones e acentos
+ *  --color_accent           Cor de destaque para o avatar de perfil
+ *  --color_border_light     Cinza claro para divisores e bordas sutis
+ *  --color_neutral_dark     Texto escuro para headings
+ *  --color_neutral          Texto cinza para descrições
+ *  --color_neutral_light    Borda clara do gráfico
+ *  --color_error            Vermelho para alertas de pagamento pendente
+ *  --transition             Transição padrão do design system
  */
 
 
 /* ============================================================================
    1. CABEÇALHO PRINCIPAL
    Barra fixa no topo com efeito de desfoque (glassmorphism).
-   Largura = 100vw menos a sidebar lateral (256 px).
+   Largura = 100 % menos a sidebar lateral (256 px).
 ============================================================================ */
 
 .header-main {
@@ -53,8 +55,9 @@
 
 
 /* ============================================================================
-   2. TÍTULO E SELETOR DE PERÍODO
-   Agrupa o nome da página e o select de mês com um divisor visual entre eles.
+   2. GRUPO MARCA / TÍTULO DO HEADER
+   Agrupa o nome da página e o select de mês;
+   um divisor visual separa os dois elementos.
 ============================================================================ */
 
 .header-main .header-brand {
@@ -79,25 +82,18 @@
 
 
 /* ============================================================================
-   3. SELECT DO HEADER
-   Input nativo sem borda/fundo, estilizado para combinar com o tema.
+   3. SELECT DE PERÍODO DO HEADER
+   Estilizado de forma minimalista para se integrar ao header.
+   (Regras específicas do <select> ficam aqui, separadas do container.)
 ============================================================================ */
 
-.header-brand select {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 16px;
-}
+/* Exemplo de seletor a ser preenchido conforme o markup:
+.header-brand select { ... } */
 
 
 /* ============================================================================
    4. BOTÕES DE AÇÃO DO HEADER
-   Linha de botões ícone + botão avatar de perfil.
+   Linha de botões de ícone + botão avatar de perfil.
 ============================================================================ */
 
 .header-main .header-actions .actions {
@@ -132,20 +128,16 @@
 /* ============================================================================
    5. MENU SUSPENSO DE PERFIL
    Aparece abaixo do avatar; usa glassmorphism para integrar ao fundo.
-   Visibilidade controlada pela classe `.profile-actions-hidden`.
+   Visibilidade controlada pela classe `.profile-actions-hidden` via JS.
 ============================================================================ */
 
 .header-main .header-actions .actions .profile-actions {
   position: absolute;
   top: 80px;
   right: 0;
-  /* Diminuir a transparência (0.8) ajuda a "esconder" mais o fundo */
-  background-color: rgba(236, 236, 236, 0.8); 
-  
-  /* Valores entre 20px e 40px já dão um desfoque total */
-  -webkit-backdrop-filter: blur(30px); 
+  background-color: rgba(236, 236, 236, 0.8); /* transparência 0.8 esconde mais o fundo */
+  -webkit-backdrop-filter: blur(30px);         /* valores entre 20–40 px garantem desfoque total */
   backdrop-filter: blur(30px);
-  
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -161,7 +153,6 @@
 
 /** Botão de logout — pill vermelho centralizado. */
 .header-main .header-actions .actions .profile-actions button {
-  margin-top: 25px;
   margin: 40px auto 0;
   font-size: 16px;
   background-color: rgb(209, 23, 23);
@@ -170,7 +161,7 @@
   border-radius: 9999px;
 }
 
-/** Estado oculto — toggled via JS em `handleShowProfileActions`. */
+/** Estado oculto — toggled via `handleShowProfileActions`. */
 .header-main .header-actions .actions .profile-actions.profile-actions-hidden {
   display: none;
 }
@@ -187,7 +178,7 @@
   justify-content: flex-start;
   max-width: 1280px;
   margin: auto;
-  padding-top: 96px;   /* compensa height (64px) + gap visual do header fixo */
+  padding-top: 96px;    /* compensa height (64 px) + gap visual do header fixo */
   padding-bottom: 48px;
   padding-inline: 32px;
   gap: 50px;
@@ -238,8 +229,8 @@
 
 
 /* ============================================================================
-   8. CARDS DE RESUMO FINANCEIRO
-   Grid de 4 colunas com cartões de KPI; animação de hover em escala.
+   8. CARDS DE RESUMO FINANCEIRO (KPIs)
+   Grid de 4 colunas com cartões de indicadores; hover com escala suave.
 ============================================================================ */
 
 .gains-cards-dashboard {
@@ -262,7 +253,7 @@
   transform: scale(1.02);
 }
 
-/** Linha superior do card: ícone à esquerda, tendência à direita. */
+/** Linha superior do card: ícone à esquerda, indicador de tendência à direita. */
 .header-gain-card {
   display: flex;
   align-items: flex-start;
@@ -310,7 +301,7 @@
 
 /* ============================================================================
    9. SEÇÃO DE ESTATÍSTICAS (Gráfico + Ranking)
-   Flex row com quebra de linha; gráfico ocupa espaço fixo, ranking expande.
+   Flex row com quebra de linha; gráfico tem largura fixa, ranking expande.
 ============================================================================ */
 
 .overview-statistics-dashboard {
@@ -324,8 +315,8 @@
 
 
 /* ============================================================================
-   10. GRÁFICO DE ÁREA
-   Container do Recharts com cabeçalho e área de plotagem com bordas.
+   10. GRÁFICO DE ÁREA (Recharts)
+   Container com cabeçalho e área de plotagem com bordas arredondadas.
 ============================================================================ */
 
 /** Container principal do gráfico. */
@@ -380,6 +371,7 @@
   background-color: rgb(209, 209, 209);
 }
 
+/** Período selecionado — destaque com cor de acento. */
 .header-chart div:last-child button.selected {
   background-color: var(--color_accent);
   color: white;
@@ -418,7 +410,7 @@
 
 /**
  * Item individual do ranking.
- * Efeito de hover com padding lateral para dar sensação de seleção.
+ * Hover adiciona padding lateral para dar sensação de seleção.
  */
 .client-item-rank {
   width: 100%;
@@ -513,10 +505,10 @@
 
 /* ============================================================================
    12. ROTAS DIÁRIAS
-   Seção com lista horizontal de cards de rota, cada um com hora e endereço.
+   Lista horizontal de cards de rota, cada um com horário e endereço.
 ============================================================================ */
 
-/** Container principal das rotas — fundo cinzento suave. */
+/** Container principal — fundo cinza suave. */
 .overview-daily-routes {
   display: flex;
   flex-direction: column;
@@ -601,7 +593,7 @@
   color: var(--color_primary_variant);
 }
 
-/** Coluna de informações — serviço e endereço. */
+/** Coluna de informações — tipo de serviço e endereço. */
 .informations-route {
   display: flex;
   flex-direction: column;
@@ -620,14 +612,13 @@
 }
 
 
-
-
-
 /* ============================================================================
-   RESPONSIVIDADE TABLET
+   13. RESPONSIVIDADE — TABLET (≤ 1024 px)
 ============================================================================ */
 
 @media (max-width: 1024px) {
+
+  /** Header ocupa toda a largura (sidebar some ou vira overlay). */
   .header-main {
     width: 100%;
     padding: 0 20px;
@@ -638,10 +629,12 @@
     gap: 32px;
   }
 
+  /** KPIs: de 4 para 2 colunas. */
   .gains-cards-dashboard {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /** Gráfico e ranking empilham verticalmente. */
   .overview-statistics-dashboard {
     flex-direction: column;
   }
@@ -658,10 +651,11 @@
 
 
 /* ============================================================================
-   RESPONSIVIDADE MOBILE
+   14. RESPONSIVIDADE — MOBILE (≤ 768 px)
 ============================================================================ */
 
 @media (max-width: 768px) {
+
   .header-main {
     width: 100%;
     height: auto;
@@ -686,10 +680,6 @@
     font-size: 11px;
   }
 
-  .header-main .header-actions {
-    width: 100%;
-  }
-
   .header-main .header-actions .actions {
     width: 100%;
     justify-content: flex-end;
@@ -711,6 +701,7 @@
     gap: 24px;
   }
 
+  /** Cabeçalho da seção empilha verticalmente. */
   .header-dashboard {
     flex-direction: column;
     align-items: flex-start;
@@ -731,6 +722,7 @@
     font-size: 14px;
   }
 
+  /** KPIs: 1 coluna. */
   .gains-cards-dashboard {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -757,6 +749,7 @@
     min-height: auto;
   }
 
+  /** Header do gráfico empilha verticalmente. */
   .header-chart {
     flex-direction: column;
     align-items: flex-start;
@@ -783,6 +776,7 @@
     padding: 20px;
   }
 
+  /** Header das rotas empilha verticalmente. */
   .overview-daily-routes header {
     flex-direction: column;
     align-items: flex-start;

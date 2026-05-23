@@ -1,7 +1,6 @@
-import "./Header_Dashboard.css"
 import React from 'react'
 
-const Header_Dashboard = () => {
+const DashboardHeader = () => {
 
     // -------------------------------------------------------------------------
     // Handlers
@@ -75,4 +74,4 @@ const Header_Dashboard = () => {
     )
 }
 
-export default Header_Dashboard
+export default DashboardHeader

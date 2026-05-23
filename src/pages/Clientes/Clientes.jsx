@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Header_Clientes from '../../components/ui/Header_Clientes/Header_Clientes'
+import ClientesHeader from './ClientesHeader'
 import NovoClienteModal from '../../components/ui/NovoClienteModal/NovoClienteModal'
 import "./Clientes.css"
 
@@ -38,7 +38,7 @@ const Clientes = () => {
     <>
 
       <div className="divClientes">
-        <Header_Clientes />
+        <ClientesHeader />
         <main className="dashboard-container-clientes">
 
 

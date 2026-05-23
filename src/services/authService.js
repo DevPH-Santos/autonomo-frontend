@@ -48,12 +48,11 @@ export function login(email, senha) {
  * @param {string} senha - Senha informada no formulário.
  * @returns {Promise<object>} Retorna mensagem e dados do usuário criado.
 */
-
 export function cadastrarUsuario(nome, email, senha) {
     return apiFetch("/auth/cadastro", {
         method: "POST",
 
-        
+
         /**
          * O backend espera receber exatamente:
          * {
@@ -63,10 +62,21 @@ export function cadastrarUsuario(nome, email, senha) {
          * }
          */
         body: JSON.stringify({
-            nome, 
+            nome,
             email,
             senha,
         }),
 
     })
+}
+
+/**
+ * Remove os dados de autenticação salvos no navegador.
+ *
+ * Essa função é usada no logout para encerrar a sessão local do usuário.
+ * Depois dela, o usuário deixa de ter acesso às rotas privadas.
+*/
+export function logout() {
+    localStorage.removeItem("token")
+    localStorage.removeItem("usuario")
 }

@@ -1,8 +1,48 @@
 import "./Auth.css"
-import { Link } from "react-router-dom";
-import React from 'react'
+import { Link, useNavigate } from "react-router-dom"
+import { cadastrarUsuario, login } from "../../services/authService"
 
 const Cadastro = () => {
+
+    const navigate = useNavigate()
+    /**
+     * Função executada quando o formulário de cadastro é enviado.
+     *
+     * Ela valida se as senhas digitadas são iguais, cria o usuário no backend
+     * e, em seguida, realiza login automaticamente para liberar o acesso
+     * às rotas privadas do sistema.
+    */
+    async function handleCadastro(event) {
+        event.preventDefault()
+
+        const formData = new FormData(event.currentTarget)
+
+        const nome = formData.get("nome")
+        const email = formData.get("email")
+        const senha = formData.get("senha")
+        const confirmarSenha = formData.get("confirmarSenha")
+
+        if (senha !== confirmarSenha) {
+            alert("As senhas não coincidem.")
+            return
+        }
+
+        try {
+            await cadastrarUsuario(nome, email, senha)
+
+            const respostaLogin = await login(email, senha)
+
+            localStorage.setItem("token", respostaLogin.token)
+            localStorage.setItem("usuario", JSON.stringify(respostaLogin.usuario))
+
+            navigate("/")
+
+        } catch (error) {
+            alert(error.message)
+        }
+
+    }
+
     return (
         <>
 
@@ -21,7 +61,7 @@ const Cadastro = () => {
 
                 </div>
 
-                <form method="post" className="form-auth" id="form-login">
+                <form onSubmit={handleCadastro} className="form-auth" id="form-cadastro">
 
                     <div className="form-header">
 
@@ -35,28 +75,28 @@ const Cadastro = () => {
                         <div className="campo">
 
                             <label htmlFor="userName">NOME COMPLETO</label>
-                            <input type="text" name="userName" id="userName" required placeholder='Ex: João Maurício' />
+                            <input type="text" name="nome" id="userName" required placeholder="Ex: João Maurício" />
 
                         </div>
 
                         <div className="campo">
 
                             <label htmlFor="userEmail">EMAIL</label>
-                            <input type="email" name="userEmail" id="userEmail" required placeholder='e-mail@exemplo.com' />
+                            <input type="email" name="email" id="userEmail" required placeholder="e-mail@exemplo.com" />
 
                         </div>
 
                         <div className="campo">
 
                             <label htmlFor="userPassword">SENHA</label>
-                            <input type="password" name="userPassword" id="userPassword" placeholder='********' required />
+                            <input type="password" name="senha" id="userPassword" placeholder="********" required />
 
                         </div>
 
                         <div className="campo">
 
                             <label htmlFor="userPasswordConfirm">CONFIRMAR SENHA</label>
-                            <input type="password" name="userPasswordConfirm" id="userPasswordConfirm" placeholder='********' required />
+                            <input type="password" name="confirmarSenha" id="userPasswordConfirm" placeholder="********" required />
 
                         </div>
 

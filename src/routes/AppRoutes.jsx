@@ -9,6 +9,8 @@ import Atendimentos from "../pages/Atendimentos/Atendimentos"
 import Produtos from "../pages/Produtos/Produtos"
 import Pagamentos from "../pages/Pagamentos/Pagamentos"
 import Despesas from "../pages/Despesas/Despesas"
+import Login from "../pages/Auth/Login";
+import Cadastro from "../pages/Auth/Cadastro";
 
 const AppRoutes = () => {
   return (
@@ -26,6 +28,9 @@ const AppRoutes = () => {
                 <Route path="despesas" element={<Despesas/>}/>
 
             </Route>
+
+          <Route path="/login" element={<Login/>} />
+          <Route path="/cadastro" element={<Cadastro/>} />
 
         </Routes>
 

@@ -1,5 +1,6 @@
 import "./Auth.css"
 import React from 'react'
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
@@ -57,7 +58,9 @@ const Login = () => {
 
                 </form>
 
-                <p className="linkAuthQuestion">Não tem conta? <a href="#">Crie uma.</a></p>
+                <p className="linkAuthQuestion">
+                    Não tem conta? <Link to={"/cadastro"}>Crie uma.</Link>
+                </p>
 
             </div>
 

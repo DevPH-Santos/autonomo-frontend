@@ -1,0 +1,773 @@
+/* ===========================
+   Atendimentos.css
+   ===========================
+   Estilos do módulo de atendimentos.
+
+   Índice de seções:
+   1. Design tokens (:root)
+   2. Layout da página
+   3. Header da página
+   4. Canvas principal
+   5. Controles e filtros
+      5a. Toggle Dia/Semana
+      5b. Navegador de data
+      5c. Filtros (selects)
+   6. Tabela de atendimentos
+      6a. Cabeçalho (thead)
+      6b. Corpo (tbody)
+      6c. Células — Data/Hora
+      6d. Células — Cliente
+      6e. Células — Bairro e Valor
+      6f. Células — Status badge
+      6g. Células — Ações
+   7. Rodapé da tabela
+   8. Responsivo (≤ 900px)
+   =========================== */
+
+
+/* ─── 1. Design tokens (:root) ───────────────────────────
+   Paleta baseada no Material Design 3 (MD3), adaptada ao produto.
+
+   Convenção de nomenclatura MD3:
+   • --{role}          → cor de preenchimento (ex: --primary)
+   • --on-{role}       → cor do conteúdo sobre aquela superfície (ex: --on-primary)
+   • --{role}-container → superfície de maior destaque (ex: --primary-container)
+   • --surface-container-{nível} → camadas de superfície do mais claro ao mais escuro:
+       lowest → low → [base] → → high → highest
+
+   Tokens de layout:
+   • --radius-{sm|lg|xl|full} → raios de borda escalonados
+   • --font-headline          → família tipográfica de destaque (Manrope)
+   • --font-body              → família tipográfica de corpo (Inter)
+
+   Nota: tokens prefixados com --color_ (ex: --color_accent, --color_neutral)
+   são definidos globalmente no tema principal da aplicação e consumidos aqui.
+   ─────────────────────────────────────────────────────── */
+:root {
+  /* Pares de cor primária */
+  --primary: #006399;              /* Cor de destaque principal (azul) — botões, links, ênfase */
+  --on-primary: #f4f8ff;
+  --primary-container: #cde5ff;   /* Fundo do avatar variant "primary" */
+  --primary-fixed: #cde5ff;
+  --primary-fixed-dim: #b2d9ff;
+  --primary-dim: #005786;
+  --on-primary-fixed: #004369;
+  --on-primary-fixed-variant: #006094;
+  --on-primary-container: #005685; /* Texto sobre --primary-container */
+  --inverse-primary: #67bafd;
+
+  /* Pares de cor secundária */
+  --secondary: #4d626c;
+  --on-secondary: #f2faff;
+  --secondary-container: #cfe6f2; /* Fundo do avatar variant "secondary" */
+  --secondary-fixed: #cfe6f2;
+  --secondary-fixed-dim: #c1d8e4;
+  --secondary-dim: #415660;
+  --on-secondary-container: #40555f;
+  --on-secondary-fixed: #2d424c;
+  --on-secondary-fixed-variant: #495f69;
+
+  /* Pares de cor terciária */
+  --tertiary: #565e78;
+  --on-tertiary: #f9f8ff;
+  --tertiary-container: #d1d9f8;  /* Fundo do avatar variant "tertiary" e badge RECORRENTE */
+  --tertiary-fixed: #d1d9f8;
+  --tertiary-fixed-dim: #c3cbe9;
+  --tertiary-dim: #4a526c;
+  --on-tertiary-container: #444c65;
+  --on-tertiary-fixed: #313951;
+  --on-tertiary-fixed-variant: #4d556f;
+
+  /* Superfícies e fundos — do mais escuro ao mais claro */
+  --background: #f7f9fb;
+  --surface: #f7f9fb;
+  --surface-bright: #f7f9fb;
+  --surface-dim: #cfdce3;
+  --surface-variant: #d9e4ea;
+  --surface-container-lowest: #ffffff;   /* Fundo da tabela e dos selects */
+  --surface-container-low: #f0f4f7;     /* Fundo do hover de linha e da barra de controles */
+  --surface-container: #e8eff3;         /* Fundo do thead */
+  --surface-container-high: #e1e9ee;    /* Borda de linha mobile e hover de nav-btn */
+  --surface-container-highest: #d9e4ea; /* Fundo do toggle de período */
+  --on-background: #2a3439;
+  --on-surface: #2a3439;                /* Texto principal sobre superfícies */
+  --on-surface-variant: #566166;        /* Texto secundário / labels de coluna */
+  --inverse-surface: #0b0f10;
+  --inverse-on-surface: #9a9d9f;
+
+  /* Contornos */
+  --outline: #717c82;              /* Bordas e contornos padrão */
+  --outline-variant: #a9b4b9;
+
+  /* Estados de erro */
+  --error: #9f403d;
+  --on-error: #fff7f6;
+  --error-container: #fe8983;
+  --error-dim: #4e0309;
+  --on-error-container: #752121;
+
+  /* Variante de cor primária usada no produto */
+  --color_primary_variant: #006399;
+
+  /* Raios de borda — do mais sutil ao mais arredondado */
+  --radius-sm:   0.125rem; /* 2px  — uso interno mínimo */
+  --radius-lg:   0.25rem;  /* 4px  — bordas sutis */
+  --radius-xl:   0.5rem;   /* 8px  — cards e inputs */
+  --radius-full: 0.75rem;  /* 12px — badges, avatares, pills */
+}
+
+
+/* ─── 2. Layout da página ────────────────────────────────
+   Wrapper que centraliza todo o conteúdo da rota.
+   A largura máxima de 1280px mantém legibilidade em monitores largos.
+   ─────────────────────────────────────────────────────── */
+.atendimentos-page {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+
+/* ─── 3. Header da página ────────────────────────────────
+   Contém o bloco de título/subtítulo (esquerda) e o botão
+   primário "Novo Atendimento" (direita).
+   Layout flex com justify-content: space-between para os afastar.
+   ─────────────────────────────────────────────────────── */
+.headerPage-atendimentos {
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5rem auto 0 auto; /* Nota: margin-top: 2rem é sobrescrito por margin shorthand */
+}
+
+.headerPage-atendimentos h1 {
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: -0.9px;  /* Tracking negativo para headlines grandes */
+  color: var(--color_neutral_dark);
+}
+
+.headerPage-atendimentos p {
+  color: var(--color_neutral);
+  font-size: 18px;
+  line-height: 28px;
+  margin-top: 4px;
+}
+
+/* Botão primário "Novo Atendimento":
+   usa --color_accent e --color_primary_dark do tema global da aplicação */
+.headerPage-atendimentos button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color_accent);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition); /* Transição definida no tema global */
+}
+
+.headerPage-atendimentos button:hover {
+  background-color: var(--color_primary_dark);
+}
+
+
+/* ─── 4. Canvas principal ────────────────────────────────
+   Área interna que agrupa a barra de controles, a tabela
+   e o rodapé. Tem sua própria largura máxima (1400px) para
+   permitir que a tabela respire mais em monitores ultralargos.
+   ─────────────────────────────────────────────────────── */
+.atendimentos-canvas {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+
+/* ─── 5. Controles e filtros ─────────────────────────────
+   Barra superior que contém o toggle de período + navegador
+   de data (esquerda) e os três selects de filtro (direita).
+   flex-wrap permite quebrar em duas linhas em viewports médios.
+   ─────────────────────────────────────────────────────── */
+.controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  background: var(--surface-container-low);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+/* Wrapper que mantém o toggle e o navegador de data alinhados */
+.view-date-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+/* 5a. Toggle Dia / Semana
+   Pill segmentado com fundo escuro.
+   O botão ativo recebe fundo branco e box-shadow para
+   aparência de "tab flutuante" sobre o trilho.
+   ─────────────────────────────────────────────────────── */
+.view-toggle {
+  display: flex;
+  background: var(--surface-container-highest); /* Trilho do toggle */
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  gap: 0.125rem;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--on-surface-variant);
+}
+
+/* Estado ativo: tab elevada sobre o trilho */
+.toggle-btn.active {
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  color: var(--primary);
+}
+
+/* Hover nos botões inativos: escurece o texto suavemente */
+.toggle-btn:not(.active):hover {
+  color: var(--on-surface);
+}
+
+
+/* 5b. Navegador de data
+   Exibe a data formatada entre dois botões de chevron (anterior / próximo).
+   Os chevrons ainda não possuem lógica de navegação implementada.
+   ─────────────────────────────────────────────────────── */
+.date-navigator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem; /* Separa visualmente do toggle */
+}
+
+.nav-btn {
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  color: var(--on-surface);
+}
+
+.nav-btn:hover {
+  background: var(--surface-container-high);
+}
+
+.date-label {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--on-surface);
+  white-space: nowrap; /* Impede quebra de linha na data */
+}
+
+
+/* 5c. Filtros secundários (selects)
+   Três selects customizados com ícone Material Symbols à direita.
+   appearance: none remove a seta nativa do navegador.
+   O ícone é posicionado de forma absoluta dentro do wrapper
+   e recebe pointer-events: none para não interceptar cliques no select.
+   ─────────────────────────────────────────────────────── */
+.filters-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Necessário para o posicionamento absoluto do ícone interno */
+.filter-select-wrapper {
+  position: relative;
+}
+
+.filter-select {
+  appearance: none;   /* Remove a seta padrão do navegador */
+  background: var(--surface-container-lowest);
+  border: none;
+  padding: 0.625rem 2.5rem 0.625rem 1rem; /* Padding direito de 2.5rem reserva espaço para o ícone */
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Ring de foco acessível com a cor primária */
+.filter-select:focus {
+  box-shadow: 0 0 0 2px rgba(0, 99, 153, 0.2);
+}
+
+/* Ícone decorativo sobreposto — não captura eventos do mouse */
+.filter-select-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Cliques passam direto para o select abaixo */
+  color: var(--outline);
+  font-size: 1.1rem;
+}
+
+
+/* ─── 6. Tabela de atendimentos ──────────────────────────
+   Tabela full-width com border-collapse: collapse.
+   Divisões horizontais feitas por border-bottom nas células
+   (sem separadores verticais entre colunas).
+   overflow: hidden no container garante que o border-radius
+   corte corretamente as células dos cantos.
+   ─────────────────────────────────────────────────────── */
+.table-container {
+  background: var(--surface-container-lowest);
+  border-radius: 0.75rem;
+  overflow: hidden; /* Faz o border-radius do container cortar thead e tbody */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.atendimentos-table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+
+/* 6a. Cabeçalho (thead)
+   Fundo sutilmente diferenciado (--surface-container) para
+   distinguir cabeçalho do corpo sem uso de bordas pesadas.
+   Rótulos em uppercase com letter-spacing seguem o padrão MD3
+   para labels de tabela (Overline style).
+   ─────────────────────────────────────────────────────── */
+.atendimentos-table thead tr {
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+}
+
+.atendimentos-table th {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Padding assimétrico nas colunas extremas para respiro visual */
+.atendimentos-table th:first-child {
+  padding-left: 2rem;
+}
+
+.atendimentos-table th:last-child {
+  padding-right: 2rem;
+  text-align: right; /* "Ações" alinhada à direita junto com os botões */
+}
+
+
+/* 6b. Corpo (tbody)
+   Divisores entre linhas com opacidade baixa para leveza visual.
+   O hover muda o fundo e, via seletor descendente, revela
+   os botões de ação (opacity: 0 → 1).
+   ─────────────────────────────────────────────────────── */
+.atendimentos-table tbody tr {
+  border-bottom: 1px solid rgba(169, 180, 185, 0.1);
+  transition: background 0.18s ease;
+}
+
+/* Remove o divisor da última linha para evitar borda dupla com o rodapé */
+.atendimentos-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.atendimentos-table tbody tr:hover {
+  background: var(--surface-container-low);
+}
+
+/* Revela os ActionButtons ao hover na linha pai */
+.atendimentos-table tbody tr:hover .row-actions {
+  opacity: 1;
+}
+
+.atendimentos-table td {
+  padding: 1.25rem 1.5rem;
+}
+
+/* Padding assimétrico nas colunas extremas (espelha o thead) */
+.atendimentos-table td:first-child {
+  padding-left: 2rem;
+}
+
+.atendimentos-table td:last-child {
+  padding-right: 2rem;
+}
+
+
+/* 6c. Célula — Data / Hora
+   Layout em coluna (flex-direction: column):
+   linha superior com o rótulo de data em peso maior,
+   linha inferior com o intervalo de horário em fonte menor.
+   ─────────────────────────────────────────────────────── */
+.cell-date {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rótulo principal: "Hoje", "Ontem", etc. */
+.date-main {
+  font-weight: 600;
+  color: var(--on-surface);
+  font-size: 0.9375rem;
+}
+
+/* Horário secundário: "08:30 - 09:30" */
+.date-time {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  margin-top: 0.125rem;
+}
+
+
+/* 6d. Célula — Cliente
+   Layout horizontal: avatar circular à esquerda,
+   bloco de texto (nome + badge) à direita.
+   ─────────────────────────────────────────────────────── */
+.cell-client {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Avatar circular com iniciais do cliente.
+   flex-shrink: 0 impede que encolha em layouts muito comprimidos. */
+.client-avatar {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Variantes de cor — mapeadas ao campo avatarVariant do dado.
+   Cada par usa container + on-container do mesmo role MD3. */
+.client-avatar.primary {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.client-avatar.secondary {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+}
+
+.client-avatar.tertiary {
+  background: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+}
+
+/* Coluna de texto: nome do cliente acima, badge abaixo */
+.client-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-name {
+  font-weight: 500;
+  color: var(--on-surface);
+  font-size: 0.9375rem;
+}
+
+/* Badge RECORRENTE: visível apenas quando item.recorrente === true.
+   Usa as cores terciárias para se distinguir do conteúdo principal
+   sem competir com o status badge da coluna de status. */
+.badge-recorrente {
+  font-size: 0.625rem;
+  background: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.75rem;
+  width: fit-content;
+  margin-top: 0.25rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+
+/* 6e. Células — Bairro e Valor
+   ─────────────────────────────────────────────────────── */
+/* Bairro: cor secundária, mesmo peso que o corpo de texto */
+.cell-neighborhood {
+  color: var(--on-surface-variant);
+  font-size: 0.9375rem;
+}
+
+/* Valor: negrito para destacar a informação financeira na varredura visual */
+.cell-value {
+  font-weight: 600;
+  color: var(--on-surface);
+  font-size: 0.9375rem;
+}
+
+
+/* 6f. Célula — Status badge
+   Pill inline com ponto colorido à esquerda e rótulo textual.
+   Dois estados semânticos:
+   • "realizado" → verde esmeralda (positivo/concluído)
+   • "pendente"  → cinza neutro (aguardando/indefinido)
+   ─────────────────────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Ponto indicador — mesmo tamanho nos dois estados */
+.status-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+}
+
+/* Estado realizado: verde esmeralda — transmite conclusão/sucesso */
+.status-badge.realizado {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.status-badge.realizado .status-dot {
+  background: #10b981;
+}
+
+/* Estado pendente: cinza neutro — transmite espera/indefinição */
+.status-badge.pendente {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.status-badge.pendente .status-dot {
+  background: #94a3b8;
+}
+
+
+/* 6g. Célula — Ações
+   Três botões de ação (ver, editar, marcar) agrupados à direita.
+   Os botões ficam invisíveis (opacity: 0) por padrão e revelam-se
+   somente no hover da linha via o seletor:
+     .atendimentos-table tbody tr:hover .row-actions { opacity: 1 }
+   Em mobile (≤ 900px) a opacity é fixada em 1, pois não há hover em touch.
+   ─────────────────────────────────────────────────────── */
+.cell-actions {
+  text-align: right;
+}
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  opacity: 0;            /* Oculto por padrão — revelado pelo hover da linha */
+  transition: opacity 0.2s ease;
+}
+
+/* Base de todos os botões de ação: ícone circular com hover de fundo */
+.action-btn {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+  background: transparent;
+}
+
+/* Botão "visualizar": ênfase em azul primário */
+.action-btn.view {
+  color: var(--primary);
+}
+
+.action-btn.view:hover {
+  background: var(--primary-container);
+}
+
+/* Botão "editar": neutro — ação secundária */
+.action-btn.edit {
+  color: var(--on-surface-variant);
+}
+
+.action-btn.edit:hover {
+  background: var(--surface-container);
+}
+
+/* Botão "marcar" quando o atendimento JÁ está realizado:
+   Neutro, pois a ação foi concluída e não há urgência de destaque. */
+.action-btn.check {
+  color: var(--on-surface-variant);
+}
+
+.action-btn.check:hover {
+  background: var(--surface-container);
+}
+
+/* Botão "marcar" quando o atendimento está PENDENTE:
+   Verde para sinalizar que a ação principal disponível é confirmar. */
+.action-btn.check-success {
+  color: #059669;
+}
+
+.action-btn.check-success:hover {
+  background: #ecfdf5;
+}
+
+/* Configuração da variação dos ícones Material Symbols:
+   FILL 0 = contorno (não preenchido), wght 400 = espessura padrão */
+.action-btn .material-symbols-outlined {
+  font-size: 1.1rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+
+/* ─── 7. Rodapé da tabela ────────────────────────────────
+   Barra inferior com dois agrupamentos:
+   • Esquerda: contador de atendimentos exibidos no período
+   • Direita:  botões ghost para exportar relatório e imprimir agenda
+   Os botões são ghost (sem fundo/borda) e ganham a cor primária no hover.
+   ─────────────────────────────────────────────────────── */
+.table-footer {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+  padding: 0 1rem;
+}
+
+/* O número de atendimentos recebe cor e peso maiores para destaque */
+.footer-count strong {
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Botões ghost: sem borda nem fundo, só mudam a cor no hover */
+.footer-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  transition: color 0.18s ease;
+}
+
+.footer-btn:hover {
+  color: var(--primary);
+}
+
+.footer-btn .material-symbols-outlined {
+  font-size: 1.125rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+
+/* ─── 8. Responsivo (≤ 900px) ────────────────────────────
+   Adaptações para tablets e celulares:
+
+   • Barra de controles empilha verticalmente (flex-direction: column)
+   • thead some para economizar altura; cada <tr> vira um bloco
+     independente estilo card com padding próprio
+   • Células passam a display: block e empilham dentro do card
+   • Botões de ação ficam com opacity: 1 permanente
+     (dispositivos touch não têm estado de hover)
+   • Header da página empilha título e botão em coluna
+   ─────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+
+  .controls-section {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 0.5rem;
+  }
+
+  /* Cabeçalho da tabela oculto em mobile */
+  .atendimentos-table thead {
+    display: none;
+  }
+
+  /* Cada linha vira um bloco card-like com padding próprio */
+  .atendimentos-table tbody tr {
+    display: block;
+    padding: 1rem;
+    border-bottom: 1px solid var(--surface-container-high);
+  }
+
+  /* Células empilhadas verticalmente dentro do card */
+  .atendimentos-table td {
+    display: block;
+    padding: 0.25rem 0;
+  }
+
+  /* Canvas com padding lateral reduzido para telas estreitas */
+  .atendimentos-canvas {
+    padding: 2rem 1rem 2rem;
+  }
+
+  /* Botões sempre visíveis em touch — não há evento hover */
+  .row-actions {
+    opacity: 1;
+  }
+
+  /* Header em coluna: título e subtítulo acima, botão abaixo */
+  .atendimentos-page > header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .atendimentos-page > header button {
+    justify-content: center;
+  }
+}
